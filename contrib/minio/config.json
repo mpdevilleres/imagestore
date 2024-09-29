@@ -1,0 +1,12 @@
+{
+  "version": "10",
+  "aliases": {
+    "local": {
+      "url": "http://localhost:9001",
+      "accessKey":"AKIAQASCRQW123FQWEBC",
+      "secretKey": "W214erhio/WQE1fvdfhklserQWEEsu",
+      "api": "S3v4",
+      "path": "auto"
+    }
+  }
+}
