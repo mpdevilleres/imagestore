@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from src.datastore import get_minio_client, get_mongo_client
-from src.endpoints.image import router as image_router
+from src.endpoint import router as image_router
 from src.config import Settings, get_settings
 
 

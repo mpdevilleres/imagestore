@@ -15,8 +15,8 @@ class ImageFilterParams(BaseModel):
     depth_max: float = Field(..., ge=0, le=10000)
     colormap: ColorMap = Field(...)
 
-    @model_validator(mode='after')
+    @model_validator(mode="after")
     def check_passwords_match(self):
         if self.depth_min <= self.depth_max:
             return self
-        raise ValueError('depth_min must be less than or equal to depth_max')
+        raise ValueError("depth_min must be less than or equal to depth_max")

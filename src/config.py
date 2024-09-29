@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from fastapi import FastAPI
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -13,6 +15,9 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "Image Store"
     BUILD_TAG: str
     BUILD_COMMIT: str
+    BASE_DIR: Path = Path(__file__).parent.parent
+    SOURCE_DIR: Path = BASE_DIR.joinpath("src")
+    TEMPLATES_DIR: Path = BASE_DIR.joinpath("templates")
 
     # System Dependencies
     # ========================================================
