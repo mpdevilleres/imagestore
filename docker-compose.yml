@@ -2,6 +2,27 @@ volumes:
   minio-data: { }
 
 services:
+  traefik:
+    image: "traefik:v2.9"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web-imagestore.address=:80"
+#      - "--entrypoints.web.address=:80"
+# since the time is short, we were not able to get a reasonable domain to get certified for HTTPS
+#      - "--entrypoints.websecure.address=:443"
+#      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+#      - "--certificatesresolvers.myresolver.acme.email=mpdevilleres@gmail.com"
+#      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+#      - "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "./letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
   imagestore:
     build: .
     ports:
@@ -20,7 +41,22 @@ services:
       MONGO_PORT: 27017
       MONGO_DATABASE: image_db
       MONGO_COLLECTION: frames
-
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.imagestore.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.imagestore.entrypoints=web-imagestore"
+      - "traefik.http.routers.imagestore.service=imagestore"
+      - "traefik.http.services.imagestore.loadbalancer.server.port=8000"
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.http.routers.imagestore.rule=Host(`${DOMAIN}`)"
+#      - "traefik.http.routers.imagestore.entrypoints=websecure"
+#      - "traefik.http.services.imagestore.loadbalancer.server.port=8000"
+#      - "traefik.http.routers.imagestore.tls.certresolver=myresolver"
+#      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+#      - "traefik.http.routers.imagestore-http.rule=Host(`${DOMAIN}`)"
+#      - "traefik.http.routers.imagestore-http.entrypoints=web"
+#      - "traefik.http.routers.imagestore-http.middlewares=redirect-to-https"
   mongo:
     image: mongo
     restart: always

@@ -35,7 +35,6 @@ COPY ./cmd.sh /cmd.sh
 RUN chmod +x /entrypoint.sh
 RUN chmod +x /cmd.sh
 
-ENV ALEMBIC_CONFIG=src/ghafai_database/migration/alembic.ini
 ENV PATH=/opt:/opt/.venv/bin:${PATH}
 
 ENTRYPOINT ["/entrypoint.sh"]
