@@ -33,6 +33,6 @@ def create_app(settings: Settings = None) -> FastAPI:
     app.settings = settings
 
     # Endpoints
-    app.include_router(prefix="/api/v1", router=image_router)
+    app.include_router(prefix="", router=image_router)
 
     return app
