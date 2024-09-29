@@ -78,7 +78,7 @@ async def retrieve_frames(
     return {"image_base64": image_base64}
 
 
-@router.get("/show-frames", response_class=HTMLResponse)
+@router.get("/", response_class=HTMLResponse)
 async def show_frames(
     request: Request,
     templates: Jinja2Templates = Depends(get_templates_provider()),

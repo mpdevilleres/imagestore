@@ -36,6 +36,12 @@
 </head>
 <body>
 
+<h1>File Upload</h1>
+<form id="upload-form">
+    <input type="file" id="file-input" name="file" required>
+    <button type="submit">Upload</button>
+</form>
+
 <h1>Render Image from API</h1>
 
 <form id="image-form">
@@ -61,6 +67,38 @@
 </div>
 
 <script>
+    // Handle upload submission
+    document.getElementById('upload-form').addEventListener('submit', async function (event) {
+        event.preventDefault();  // Prevent the default form submission
+
+        const fileInput = document.getElementById('file-input');
+        const file = fileInput.files[0];
+
+        if (!file) {
+            alert('Please select a file!');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('/frames', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                alert('File uploaded successfully!');
+            } else {
+                alert('File upload failed!');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while uploading the file.');
+        }
+    });
+
     // Handle form submission
     document.getElementById('image-form').addEventListener('submit', function (event) {
         event.preventDefault(); // Prevent the default form submission
@@ -92,7 +130,8 @@
         fetch(`/frames?${queryParams.toString()}`)
             .then(response => response.json())
             .then(data => {
-                if (data.image_base64) {
+                console.log('Response data:', data); // Log the response for debugging
+                if (data.image_base64 && data.image_base64 !== 'null' && data.image_base64.trim() !== '') {
                     // Set the image source to the base64 data
                     imgElement.src = `data:image/png;base64,${data.image_base64}`;
 
@@ -102,7 +141,7 @@
                         imgElement.style.display = 'block';
                     };
                 } else {
-                    alert('No image data received.');
+                    alert('No image data received or image data is invalid.');
                 }
             })
             .catch(error => {

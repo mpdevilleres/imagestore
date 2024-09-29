@@ -14,6 +14,18 @@ codestyle:
 	uv run ruff check src tests --fix --unsafe-fixes
 	uv run ruff format src tests
 
+.PHONY: test
+test:
+	${MAKE} dev-up
+	uv run pytest -vv tests
+
+.PHONY: up
+up: docker-cleanup
+	docker compose up -d
+
+build:
+	docker compose build --no-cache imagestore
+
 docker-cleanup:
 	docker container kill $(shell docker container ls -qa) || true
 	docker container rm $(shell docker container ls -qa) || true
