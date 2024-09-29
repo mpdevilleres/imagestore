@@ -19,9 +19,9 @@ test:
 	${MAKE} dev-up
 	uv run pytest -vv tests
 
-.PHONY: up
-up: docker-cleanup
-	docker compose up -d
+.PHONY: up-local
+up-local: docker-cleanup
+	docker compose --profile local up -d
 
 build:
 	docker compose build --no-cache imagestore
